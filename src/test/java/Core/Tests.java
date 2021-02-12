@@ -19,12 +19,7 @@ public class Tests {
 
     @BeforeMethod
     public static void setUp() {
-        ChromeOptions options = new ChromeOptions();
-        options.setBinary(new File("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"));
-        System.setProperty("webdriver.chrome.driver", "C:\\tools\\selenium\\chromedriver.exe");
-        driver = new ChromeDriver(options);
-        driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver = Common.getDriver();
     }
 
     @AfterMethod
@@ -34,13 +29,13 @@ public class Tests {
 
     @Test(priority = 1, testName = "openYandexMarket")
     public void test1() throws InterruptedException {
-        driver.get("https://www.google.com/");
+        Common.getUrl(driver,"https://www.google.com/");
         Thread.sleep(4000);
         String googleUrl = driver.getCurrentUrl();
         assert googleUrl.equals("https://www.google.com/");
-        driver.findElement(By.xpath("//*[@id=\"tsf\"]/div[2]/div[1]/div[1]/div/div[2]/input")).sendKeys("яндекс маркет");
+        Common.inputValue(driver, By.cssSelector("body > div.L3eUgb > div.o3j99.ikrT4e.om7nvf > form > div:nth-child(2) > div.A8SBwf > div.RNNXgb > div > div.a4bIc > input"), "яндекс маркет");
         Thread.sleep(3000);
-        driver.findElement(By.xpath("//*[@id=\"tsf\"]/div[2]/div[1]/div[2]/div[2]/div[2]/center/input[1]")).click();
+        Common.clickWhenVisible(driver, By.cssSelector("body > div.L3eUgb > div.o3j99.ikrT4e.om7nvf > form > div:nth-child(2) > div.A8SBwf.emcav > div.UUbT9 > div.aajZCb > div.tfB0Bf > center > input.gNO89b"));
         Thread.sleep(3000);
         String marketLink = driver.findElement(By.xpath("//*[@id=\"rso\"]/div[1]/div/div/div[1]/a/h3/span")).getText();
         assert marketLink.startsWith("Яндекс.Маркет");
