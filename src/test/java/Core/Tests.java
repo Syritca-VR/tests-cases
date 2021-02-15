@@ -3,23 +3,27 @@ package Core;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.io.File;
-import java.util.concurrent.TimeUnit;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
 
 public class Tests {
 
     public static WebDriver driver;
+    static Properties html_xpath = new Properties();
+    static Properties html_selector = new Properties();
 
     @BeforeMethod
-    public static void setUp() {
-        driver = Common.getDriver();
+    public static void setUp() throws IOException {
+        driver = Common.getGoogleDriver();
+        html_xpath.load(new FileInputStream("./locators/html_xpath.properties"));
+        html_selector.load(new FileInputStream("./locators/html_selector.properties"));
     }
 
     @AfterMethod
@@ -30,16 +34,16 @@ public class Tests {
     @Test(priority = 1, testName = "openYandexMarket")
     public void test1() throws InterruptedException {
         Common.getUrl(driver,"https://www.google.com/");
-        Thread.sleep(4000);
         String googleUrl = driver.getCurrentUrl();
+        Thread.sleep(2000);
         assert googleUrl.equals("https://www.google.com/");
-        Common.inputValue(driver, By.cssSelector("body > div.L3eUgb > div.o3j99.ikrT4e.om7nvf > form > div:nth-child(2) > div.A8SBwf > div.RNNXgb > div > div.a4bIc > input"), "яндекс маркет");
+        Common.inputValue(driver, By.cssSelector(html_selector.getProperty("google_input_text")), "яндекс маркет");
         Thread.sleep(3000);
-        Common.clickWhenVisible(driver, By.cssSelector("body > div.L3eUgb > div.o3j99.ikrT4e.om7nvf > form > div:nth-child(2) > div.A8SBwf.emcav > div.UUbT9 > div.aajZCb > div.tfB0Bf > center > input.gNO89b"));
+        Common.clickWhenVisible(driver, By.cssSelector(html_selector.getProperty("search_in_google_btn")));
         Thread.sleep(3000);
-        String marketLink = driver.findElement(By.xpath("//*[@id=\"rso\"]/div[1]/div/div/div[1]/a/h3/span")).getText();
+        String marketLink = driver.findElement(By.xpath(html_xpath.getProperty("yandex_market_link_in_google"))).getText();
         assert marketLink.startsWith("Яндекс.Маркет");
-        driver.findElement(By.xpath("//*[@id=\"rso\"]/div[1]/div/div/div[1]/a/h3/span")).click();
+        driver.findElement(By.xpath(html_xpath.getProperty("yandex_market_link_in_google"))).click();
         Thread.sleep(3000);
         String marketUrl = driver.getCurrentUrl();
         assert marketUrl.equals("https://market.yandex.ru/");
@@ -52,21 +56,18 @@ public class Tests {
         String marketUrl = driver.getCurrentUrl();
         assert marketUrl.equals("https://market.yandex.ru/");
         Thread.sleep(3000);
-        driver.findElement(By.xpath("//*[@id=\"header-search\"]")).sendKeys("пылесосы");
-        driver.findElement(By.cssSelector("body > div._111XIPXNiH.main > div._2lRCim4LLL > noindex > div > div > div._1GYM8vbLKv > div._2zPWBCw2Ic > div > form > div > div:nth-child(2) > button")).click();
-        Thread.sleep(5000);
-        driver.findElement(By.xpath("/html/body/div[2]/div[3]/div[3]/div[1]/div/div[2]/div[1]/div/div/div[1]/a/div[2]")).click();
-        Thread.sleep(3000);
+        Common.inputValue(driver, By.xpath(html_xpath.getProperty("search_on_yandex_market")), "пылесосы");
+        Common.clickWhenVisible(driver, By.cssSelector(html_selector.getProperty("yandex_market_search_button")));
+        Common.clickWhenVisible(driver, By.xpath(html_xpath.getProperty("yandex_market_vacuum_cleaner_button")));
         Actions scroll = new Actions(driver);
-        WebElement onlyInSale = driver.findElement(By.xpath("//*[@id=\"search-prepack\"]/div/div[3]/div/div/div[2]/div[4]/div/div/fieldset/div/label/div"));
+        WebElement onlyInSale = driver.findElement(By.xpath(html_xpath.getProperty("yandex_market_only_in_sale_button")));
         scroll.moveToElement(onlyInSale).release().perform();
         onlyInSale.click();
-        driver.findElement(By.xpath("//*[@id=\"search-prepack\"]/div/div[3]/div/div/div[2]/div[3]/div/div/fieldset/ul/li[11]/div/a/label/div")).click();
-        Thread.sleep(4000);
-        driver.findElement(By.xpath("//*[@id=\"search-prepack\"]/div/div[3]/div/div/div[2]/div[3]/div/div/fieldset/footer/button")).click();
-        driver.findElement(By.xpath("//*[@id=\"7893318-suggester\"]")).sendKeys("polaris");
-        driver.findElement(By.xpath("//*[@id=\"search-prepack\"]/div/div[3]/div/div/div[2]/div[3]/div/div/fieldset/ul/li/div/a/label/div")).click();
-        driver.findElement(By.xpath("//*[@id=\"glpriceto\"]")).sendKeys("6001");
+        Common.clickWhenVisible(driver, By.xpath(html_xpath.getProperty("vitek_vacuum_cleaners_button")));
+        Common.clickWhenVisible(driver, By.xpath(html_xpath.getProperty("yandex_market_show_all")));
+        Common.inputValue(driver, By.xpath(html_xpath.getProperty("search_brand")), "polaris");
+        Common.clickWhenVisible(driver, By.xpath(html_xpath.getProperty("polaris_vacuum_cleaner_button")));
+        Common.inputValue(driver, By.xpath(html_xpath.getProperty("yandex_market_set_price")), "6001");
         Thread.sleep(1000);
         driver.findElement(By.xpath("//*[@id=\"search-prepack\"]/div/div[3]/div/div/div[2]/div[2]/div/div/fieldset/div/ul"));
         Thread.sleep(3000);
@@ -74,7 +75,7 @@ public class Tests {
         scroll.moveToElement(showAll).release().perform();
         showAll.click();
         Thread.sleep(3000);
-        driver.findElement(By.xpath("/html/body/div[2]/section/div[2]/div/div/div[3]/div/div/a[2]")).click();
+        Common.clickWhenVisible(driver, By.xpath("/html/body/div[2]/section/div[2]/div/div/div[3]/div/div/a[2]"));
         Thread.sleep(3000);
         scroll.moveToElement(driver.findElement(By.xpath("//*[@id=\"search-prepack\"]/div/div[3]/div/div/div[2]/div[4]/div/div/fieldset/div/label/div"))).release().perform();
         Thread.sleep(5000);

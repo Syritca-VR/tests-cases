@@ -15,7 +15,7 @@ public class Common {
 
     public static WebDriver driver;
 
-    public static WebDriver getDriver() {
+    public static WebDriver getGoogleDriver() {
         ChromeOptions options = new ChromeOptions();
         options.setBinary(new File("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"));
         System.setProperty("webdriver.chrome.driver", "C:\\tools\\selenium\\chromedriver.exe");

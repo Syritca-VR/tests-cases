@@ -8,7 +8,6 @@ import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.List;
 
 public class KavichkiTest {
 
@@ -16,7 +15,7 @@ public class KavichkiTest {
 
     @BeforeMethod
     public static void setUp() {
-        driver = Common.getDriver();
+        driver = Common.getGoogleDriver();
     }
 
     @AfterMethod
@@ -29,7 +28,7 @@ public class KavichkiTest {
         String spreadsheetId = "1hEkv8JKKDO91mUuNC7L1u1HDzi1HbDsjqQ8hoMxH6RY";
         Common.getUrl(driver,"https://checkme.kavichki.com/");
         String text = Common.getTextFromKavichki(driver, 1, 1);
-        GoogleAuthorizeUtil.sendTextToGoogleTable(spreadsheetId, "B1", text);
+        GoogleAuthorizeUtil.sendTextToGoogleTable(spreadsheetId, "E1", text);
         Thread.sleep(3000);
         ValueRange data = GoogleAuthorizeUtil.getDataFromGoogleTable(spreadsheetId, "A1", "A2", 1);
         System.out.println(data);

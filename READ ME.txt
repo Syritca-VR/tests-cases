@@ -1,0 +1,23 @@
+This application allows you to work with any kind of drivers: android, iOS, web
+
+The Common class contains functions for working with drivers:
+ - getGoogleDriver function turns on google driver
+ - getUrl function gets url
+ - clickWhenVisible function click on an element
+ - inputValue function sends data
+ - CheckElementOnDisplaying function checks for element
+ - getText function gets text of the element
+ - getTextFromKavichki exclusive function, only works with Kavichki table
+
+ All functions also include waiting, so that all elements have time to be displayed or loaded
+
+The GoogleAuthorizeUtil class has a set of tools for working with google tables
+ - getCredentials function authenticated for google tables
+ - getDataFromGoogleTable function gets text from google tables
+ - sendTextToGoogleTable function sends text to google tables
+
+ Directory locators contains various locators that were encountered when working with tests
+
+ Directory resources contains credentials file for working with google tables
+
+ You can add your credentials files here and customize the work with your tables
