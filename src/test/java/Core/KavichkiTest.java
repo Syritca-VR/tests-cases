@@ -1,15 +1,14 @@
 package Core;
 
-import org.openqa.selenium.By;
+import com.google.api.services.sheets.v4.model.ValueRange;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.io.File;
-import java.util.concurrent.TimeUnit;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.List;
 
 public class KavichkiTest {
 
@@ -26,13 +25,13 @@ public class KavichkiTest {
     }
 
     @Test(priority = 1, testName = "getTextFromTable")
-    public void getTextFromTable() throws InterruptedException {
+    public void getTextFromTable() throws InterruptedException, IOException, GeneralSecurityException {
+        String spreadsheetId = "1hEkv8JKKDO91mUuNC7L1u1HDzi1HbDsjqQ8hoMxH6RY";
         Common.getUrl(driver,"https://checkme.kavichki.com/");
-        String text = Common.getTextFromKavichki(driver, 1, 2);
-        
-        //*[@id="bubble-87"]/div/div/div[2]
-        //*[@id="waffle-rich-text-editor"]
-        //*[@id="waffle-rich-text-editor"]
-
+        String text = Common.getTextFromKavichki(driver, 1, 1);
+        GoogleAuthorizeUtil.sendTextToGoogleTable(spreadsheetId, "B1", text);
+        Thread.sleep(3000);
+        ValueRange data = GoogleAuthorizeUtil.getDataFromGoogleTable(spreadsheetId, "A1", "A2", 1);
+        System.out.println(data);
     }
 }
