@@ -6,7 +6,7 @@ public class HttpRequestsTest {
 
     @Test(priority = 1, testName = "getAllEmployees")
     public void getAllEmployees() throws Exception {
-        HttpRequests.getAllEmployees("admin", "admin123");
+        HttpRequests.getAllEmployees("user", "user123");
     }
 
     @Test(priority = 2, testName = "getEmployeeById")
