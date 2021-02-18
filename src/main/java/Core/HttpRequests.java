@@ -144,7 +144,7 @@ public class HttpRequests {
             String encoding = getBase64(username, password);
 
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("PUT");
+            connection.setRequestMethod("DELETE");
             connection.setDoOutput(true);
             connection.setRequestProperty("Authorization", "Basic " + encoding);
             connection.setRequestProperty("Content Type", "application/json");
@@ -170,6 +170,4 @@ public class HttpRequests {
             throw new Exception("Something went wrong " + code);
         }
     }
-
-
 }
